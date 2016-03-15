@@ -1,8 +1,10 @@
 module Pipe
-  include Math
-
   def path
-    "/Users/levkravinsky/Library/Application\ Support/Dolphin/Pipes/pipe"
+    if ARGV[0]
+      path = ARGV[0] + "Pipes/pipe"
+    else
+      path = "#{ENV["HOME"]}/Library/Application\ Support/Dolphin/Pipes/pipe"
+    end
   end
 
   def press(button)

@@ -1,32 +1,32 @@
 require 'socket'
-require_relative "./neutral.rb"
+require 'byebug'
+require_relative "neutral"
 require_relative "pipe"
 require_relative "tech"
-require_relative "memreader"
 
 class Memreader
   include Neutral
   include Tech
   include Pipe
 
-  attr_accessor :socket
-
   def initialize
-    @@state = {
-      "p1_x" => 0,
-      "p2_x" => 0
-    }
+    @@state = {}
+    @@osx_path = "#{ENV["HOME"]}/Library/Application\ Support/Dolphin/"
     begin
       create_socket
     rescue => e
-      `rm ~/Library/Application\\ Support/Dolphin/MemoryWatcher/MemoryWatcher`
+      `rm ~/Library/Application\\ Support/Dolphin/MemoryWatcher/MemoryWatcher` unless ARGV[0]
       create_socket
     end
   end
 
   def create_socket
     @sock = Socket.new(:AF_UNIX, :DGRAM)
-    path = "/Users/levkravinsky/Library/Application\ Support/Dolphin/MemoryWatcher/MemoryWatcher"
+    if ARGV[0]
+      path = ARGV[0] + "MemoryWatcher/MemoryWatcher"
+    else
+      path = @@osx_path + "MemoryWatcher/MemoryWatcher"
+    end
     @sock.bind(Socket.sockaddr_un(path))
   end
 
@@ -57,8 +57,13 @@ class Memreader
       when "80453F24" then @@state["p2_y"] = hex_to_float(value)
       when "804530E0" then @@state["p1_percent"] = value[0..-5].to_i(16)
       when "80453F70" then @@state["p2_percent"] = value[0..-5].to_i(16)
-      when "80453FC0 23A0" then @@state["p1_hitstun"] = hex_to_float(value)
-      when "80453FC0 19BC" then @@state["p1_hitlag"] = hex_to_float(value)
+      when "80453FC0 23A0" then @@state["p2_hitstun"] = hex_to_float(value)
+      when "80453FC0 19BC" then @@state["p2_hitlag"] = hex_to_float(value)
+      when "80453FC0 140" then @@state["p2_in_air"] = value
+      when "80453FC0 12C" then @@state["p2_y_velocity"] = hex_to_float(value)
+      # when "80453FC0 9FFC" then puts "tech: #{value}"
+      # when "8046B6CC" then @@state["frame_count"] = value.to_i(16)
+      # when "80453FC0 7026" then @@state["tumble"] = value
       else throw "Could not find address (#{address}) in game state"
     end
   end
@@ -68,5 +73,5 @@ class Memreader
   end
 end
 
-mr = Memreader.new
-mr.monitor
+ai = Memreader.new
+ai.monitor

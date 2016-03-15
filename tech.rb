@@ -33,7 +33,4 @@ module Tech
     wavedash(:down)
     main_stick(0.5, 0.5)
   end
-
-  def shffl(aerial)
-  end
 end

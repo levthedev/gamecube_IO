@@ -1,12 +1,9 @@
 require 'socket'
-require 'byebug'
 require_relative "neutral"
 require_relative "pipe"
-require_relative "tech"
 
 class Memreader
   include Neutral
-  include Tech
   include Pipe
 
   def initialize
@@ -61,9 +58,6 @@ class Memreader
       when "80453FC0 19BC" then @@state["p2_hitlag"] = hex_to_float(value)
       when "80453FC0 140" then @@state["p2_in_air"] = value
       when "80453FC0 12C" then @@state["p2_y_velocity"] = hex_to_float(value)
-      # when "80453FC0 9FFC" then puts "tech: #{value}"
-      # when "8046B6CC" then @@state["frame_count"] = value.to_i(16)
-      # when "80453FC0 7026" then @@state["tumble"] = value
       else throw "Could not find address (#{address}) in game state"
     end
   end

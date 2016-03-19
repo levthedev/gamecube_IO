@@ -31,9 +31,14 @@ copy over a gamecube controller setup (`pipe.ini`)
 Next, turn on background input. you can do this by opening dolphin and then following these steps.
 
 Click on the 'Controllers' menu icon in the top right.
+
 Under 'GameCube Controllers', click the drop-down menu next to 'Port 2' and select 'Standard Controller'. Then click 'Configure' to the right.
-In the top left corner click the 'Device' drop-down menu. There should be an option to select 'Pipe/0/pipe' (possibly named 'Pipe/1/pipe'). If there is no such device, go back to Setup the Dolphin home folder and make sure that you have created the pipe file in the correct location.
+
+In the top left corner click the 'Device' drop-down menu. There should be an option to select 'Pipe/0/pipe' (possibly named 'Pipe/1/pipe'). 
+If there is no such device, go back to Setup the Dolphin home folder and make sure that you have created the pipe file in the correct location.
+
 Having selected the device, click the 'Profile' drop-down menu to the right. There should be an option to select 'pipe' — if not, return to the steps above and ensure that pipe.ini has been copied to the correct location. Select 'pipe' and click 'Load' to the right.
+
 In the bottom right, under 'Options', click the box next to 'Background Input'. Then click 'OK' to exit the configure menu and 'OK' again to exit the controllers menu.
 
 Finally, run `memorywatcher.rb` with an argument of your root dolphin path (unless you are on OSX, in which case it shouldn't need this)
